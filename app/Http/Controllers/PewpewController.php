@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pewpew;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use function Laravel\Prompts\error;
@@ -14,15 +15,7 @@ class PewpewController extends Controller
      */
     public function index():View
     {
-        return view('pewpews.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return view('pewpews.index', ['pewpews' => Pewpew::with('user')->latest()->get()]);
     }
 
     /**
@@ -30,38 +23,32 @@ class PewpewController extends Controller
      */
     public function store(Request $request)
     {
-        return ;
+        $validated = $request->validate([
+            'message' => 'required|string|max:255'
+        ]);
+
+        $request->user()->pewpews()->create($validated);
+
+        return redirect()->route('pewpews.index');
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Pewpew $pewpew)
+    public function edit(Pewpew $pewpew):View
     {
-        //
+        $this->authorize('update', $pewpew);
+        return view('pewpews.edit', ['pewpew' => $pewpew]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Pewpew $pewpew)
+    public function update(Request $request, Pewpew $pewpew):RedirectResponse
     {
-        //
-    }
+        $this->authorize('update', $pewpew);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Pewpew $pewpew)
-    {
-        //
-    }
+        $validated = $request->validate([
+            'message' => 'required|string|max:255',
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Pewpew $pewpew)
-    {
-        //
+        $pewpew->update($validated);
+
+        return redirect()->route('pewpews.index');
     }
 }
