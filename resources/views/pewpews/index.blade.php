@@ -44,6 +44,13 @@
                                         <x-dropdown-link :href="route('pewpews.edit', $pewpew)">
                                             {{ __('Edit') }}
                                         </x-dropdown-link>
+                                        <form method="POST" action="{{ route('pewpews.destroy', $pewpew) }}">
+                                            @csrf
+                                            @method('delete')
+                                            <x-dropdown-link :href="route('pewpews.destroy', $pewpew)" onclick="event.preventDefault(); this.closest('form').submit();">
+                                                {{ __('Delete') }}
+                                            </x-dropdown-link>
+                                        </form>
                                     </x-slot>
                                 </x-dropdown>
                             @endif

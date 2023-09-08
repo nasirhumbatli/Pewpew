@@ -51,4 +51,12 @@ class PewpewController extends Controller
 
         return redirect()->route('pewpews.index');
     }
+
+    public function destroy(Pewpew $pewpew):RedirectResponse
+    {
+        $this->authorize('delete', $pewpew);
+
+        $pewpew->delete();
+        return redirect()->route('pewpews.index');
+    }
 }

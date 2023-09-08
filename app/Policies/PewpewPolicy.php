@@ -45,7 +45,7 @@ class PewpewPolicy
      */
     public function delete(User $user, Pewpew $pewpew): bool
     {
-        //
+        return $this->update($user, $pewpew);
     }
 
     /**
