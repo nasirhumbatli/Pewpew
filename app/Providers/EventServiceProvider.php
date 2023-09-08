@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\PewpewCreated;
+use App\Listeners\SendNewPewpewNotifications;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -15,6 +17,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
+        PewpewCreated::class => [
+            SendNewPewpewNotifications::class
+        ],
+
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
